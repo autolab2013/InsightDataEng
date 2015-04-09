@@ -1,0 +1,21 @@
+mkdir classes; javac -classpath /opt/hadoop-2.6.0/share/hadoop/common/*:/opt/hadoop-2.6.0/share/hadoop/yarn/lib/*:/opt/hadoop-2.6.0/share/hadoop/mapreduce/lib/*:/opt/hadoop-2.6.0/share/hadoop/mapreduce/*:./  -d classes src/*.java; jar cvf PageRank.jar classes;echo classes/*.class; hadoop jar PageRank.jar PageRank
+mkdir: cannot create directory ‘classes’: File exists
+Note: src/PageRank.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+added manifest
+adding: classes/(in = 0) (out= 0)(stored 0%)
+adding: classes/TrustReducer.class(in = 1113) (out= 439)(deflated 60%)
+adding: classes/LeftoverReducer.class(in = 1190) (out= 486)(deflated 59%)
+adding: classes/NodeOrDouble.class(in = 1471) (out= 802)(deflated 45%)
+adding: classes/LeftoverMapper.class(in = 1059) (out= 433)(deflated 59%)
+adding: classes/NodeRecordWriter.class(in = 2100) (out= 1129)(deflated 46%)
+adding: classes/NodeInputFormat.class(in = 823) (out= 362)(deflated 56%)
+adding: classes/PageRank.class(in = 2905) (out= 1481)(deflated 49%)
+adding: classes/Node.class(in = 2745) (out= 1478)(deflated 46%)
+adding: classes/NodeRecordReader.class(in = 3117) (out= 1540)(deflated 50%)
+adding: classes/TrustMapper.class(in = 1069) (out= 437)(deflated 59%)
+adding: classes/NodeOutputFormat.class(in = 1566) (out= 685)(deflated 56%)
+classes/LeftoverMapper.class classes/LeftoverReducer.class classes/Node.class classes/NodeInputFormat.class classes/NodeOrDouble.class classes/NodeOutputFormat.class classes/NodeRecordReader.class classes/NodeRecordWriter.class classes/PageRank.class classes/TrustMapper.class classes/TrustReducer.class
+15/04/08 22:39:49 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
+15/04/08 22:39:49 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=
+ERROR IN JOB: java.net.ConnectException: Call From nathanlrf-virtual-machine/127.0.1.1 to localhost:9000 failed on connection exception: java.net.ConnectException: Connection refused; For more details see:  http://wiki.apache.org/hadoop/ConnectionRefused
