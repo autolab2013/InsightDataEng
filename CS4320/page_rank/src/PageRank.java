@@ -12,78 +12,78 @@ import org.apache.hadoop.util.*;
 
 public class PageRank {
 
-    public static void main(String[] args) throws IOException {
-	int numRepititions = 5;
-	long leftover = 0;
-	long size = 0;
-	for(int i = 0; i < 2*numRepititions; i++) {
-	    Job job;
-	    if(i%2 == 0) {
-		job = getTrustJob();
-	    }
-	    else {
-		job = getLeftoverJob(leftover, size);
-	    }
+	public static void main(String[] args) throws IOException {
+		int numRepititions = 5;
+		long leftover = 0;
+		long size = 0;
+		for(int i = 0; i < 2*numRepititions; i++) {
+			Job job;
+			if(i%2 == 0) {
+				job = getTrustJob();
+			}
+			else {
+				job = getLeftoverJob(leftover, size);
+			}
 
-	    String inputPath = i == 0 ? "input" : "stage" + (i-1);
-	    String outputPath = "stage" + i;
+			String inputPath = i == 0 ? "input" : "stage" + (i-1);
+			String outputPath = "stage" + i;
 
-	    FileInputFormat.addInputPath(job, new Path(inputPath));
-	    FileOutputFormat.setOutputPath(job, new Path(outputPath));
+			FileInputFormat.addInputPath(job, new Path(inputPath));
+			FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
-	    try { 
-		job.waitForCompletion(true);
-	    } catch(Exception e) {
-		System.err.println("ERROR IN JOB: " + e);
-		return;
-	    }
-	    if(i%2 == 0) {
-		// Set up leftover and size
-	    } else {
-		// Set up leftover and size
-	    }
+			try {
+				job.waitForCompletion(true);
+			} catch(Exception e) {
+				System.err.println("ERROR IN JOB: " + e);
+				return;
+			}
+			if(i%2 == 0) {
+				// Set up leftover and size
+			} else {
+				// Set up leftover and size
+			}
+		}
 	}
-    }
-    public static Job getStandardJob(String l, String s) throws IOException {
-	Configuration conf = new Configuration();
-	if(!l.equals("") && !s.equals("")) {
-	    conf.set("leftover", l);
-	    conf.set("size", s);
+	public static Job getStandardJob(String l, String s) throws IOException {
+		Configuration conf = new Configuration();
+		if(!l.equals("") && !s.equals("")) {
+			conf.set("leftover", l);
+			conf.set("size", s);
+		}
+		Job job = new Job(conf);
+
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(Node.class);
+
+		job.setInputFormatClass(NodeInputFormat.class);
+		job.setOutputFormatClass(NodeOutputFormat.class);
+
+		job.setJarByClass(PageRank.class);
+
+		return job;
 	}
-	Job job = new Job(conf);
 
-	job.setOutputKeyClass(IntWritable.class);
-	job.setOutputValueClass(Node.class);
+	public static Job getTrustJob() throws IOException{
 
-	job.setInputFormatClass(NodeInputFormat.class);
-	job.setOutputFormatClass(NodeOutputFormat.class);
+		Job job = getStandardJob("", "");
 
-	job.setJarByClass(PageRank.class);
+		job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(NodeOrDouble.class);
 
-	return job;
-    }
+		job.setMapperClass(TrustMapper.class);
+		job.setReducerClass(TrustReducer.class);
 
-    public static Job getTrustJob() throws IOException{
+		return job;
+	}
 
-	Job job = getStandardJob("", "");
+	public static Job getLeftoverJob(long l, long s) throws IOException{
+		Job job = getStandardJob("" + l, "" + s);
 
-	job.setMapOutputKeyClass(IntWritable.class);
-	job.setMapOutputValueClass(NodeOrDouble.class);
-	
-	job.setMapperClass(TrustMapper.class);
-	job.setReducerClass(TrustReducer.class);
+		job.setMapperClass(LeftoverMapper.class);
+		job.setReducerClass(LeftoverReducer.class);
 
-	return job;
-    }
-
-    public static Job getLeftoverJob(long l, long s) throws IOException{
-	Job job = getStandardJob("" + l, "" + s);
-
-	job.setMapperClass(LeftoverMapper.class);
-	job.setReducerClass(LeftoverReducer.class);
-
-	return job;
-    }
+		return job;
+	}
 }
 	       
 

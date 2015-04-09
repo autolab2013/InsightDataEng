@@ -9,7 +9,7 @@ import org.apache.hadoop.util.*;
 
 public class TrustReducer extends Reducer<IntWritable, NodeOrDouble, IntWritable, Node> {
     public void reduce(IntWritable key, Iterable<NodeOrDouble> values, Context context)
-	throws IOException, InterruptedException {
-	//Implement
+            throws IOException, InterruptedException {
+        //Implement
     }
 }

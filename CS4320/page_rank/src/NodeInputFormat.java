@@ -12,6 +12,6 @@ import org.apache.hadoop.util.*;
 
 public class NodeInputFormat extends FileInputFormat<IntWritable, Node> {
     public RecordReader<IntWritable, Node> createRecordReader(InputSplit input, TaskAttemptContext ctx) throws IOException {
-	return new NodeRecordReader(); //Simply construct and return a NodeRecordReader
+        return new NodeRecordReader(); //Simply construct and return a NodeRecordReader
     }
 }
