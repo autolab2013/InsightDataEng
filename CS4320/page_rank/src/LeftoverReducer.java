@@ -9,10 +9,17 @@ import org.apache.hadoop.util.*;
 
 
 public class LeftoverReducer extends Reducer<IntWritable, Node, IntWritable, Node> {
+
     public static double alpha = 0.85;
+
     public void reduce(IntWritable nid, Iterable<Node> Ns, Context context) throws IOException, InterruptedException {
         //Implement
-
+        long size = Long.parseLong(context.getConfiguration().get("size"));
+        long leftover = Long.parseLong(context.getConfiguration().get("leftover"));
+        Node node = null;
+        for(Node node : Ns){
+            if()
+        }
 
     }
 }

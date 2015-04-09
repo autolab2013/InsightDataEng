@@ -10,7 +10,8 @@ import org.apache.hadoop.util.*;
 public class LeftoverMapper extends Mapper<IntWritable, Node, IntWritable, Node> {
 
     public void map(IntWritable nid, Node N, Context context) throws IOException, InterruptedException {
-	
-	//Implement
+	    //Implement
+        System.out.println("Leftover mapper get node id: " + N.nodeid + ", page rank is " + N.getPageRank());
+        context.write(new IntWritable(N.nodeid), new NodeOrDouble(N));
     }
 }
