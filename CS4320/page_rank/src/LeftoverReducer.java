@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.lang.Double;
+import java.lang.System;
 import java.util.*;
 
 import org.apache.hadoop.fs.Path;
@@ -14,12 +16,19 @@ public class LeftoverReducer extends Reducer<IntWritable, Node, IntWritable, Nod
 
     public void reduce(IntWritable nid, Iterable<Node> Ns, Context context) throws IOException, InterruptedException {
         //Implement
-        long size = Long.parseLong(context.getConfiguration().get("size"));
-        long leftover = Long.parseLong(context.getConfiguration().get("leftover"));
         Node node = null;
-        for(Node node : Ns){
-            if()
+        for(Node n: Ns){
+            node = n;
+            System.out.println("should only be 1 node!");
         }
-
+        long leftover_cnt = Long.parseLong(context.getConfiguration().get("leftover"));
+        double leftover = (double)leftover_cnt / PageRank.precision;
+        System.out.println("leftover: "+ leftover);
+        double size = (double)Long.parseLong(context.getConfiguration().get("size"));
+        System.out.println("size: "+ size);
+        double rank = alpha/size + (1-alpha) * (leftover/size + node.getPageRank());
+        node.setPageRank(rank);
+        context.write(new IntWritable(node.nodeid), node);
+        System.out.println("Leftover reducer pagerank is: "+ rank);
     }
 }

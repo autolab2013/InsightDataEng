@@ -1,6 +1,6 @@
 hadoop = hadoop
 
-bases = LeftoverMapper LeftoverReducer NodeInputFormat Node NodeOrDouble NodeOutputFormat NodeRecordReader NodeRecordWriter TrustMapper TrustReducer PageRank
+bases = LeftoverMapper LeftoverReducer NodeInputFormat Node NodeOrDouble NodeOutputFormat NodeRecordReader NodeRecordWriter TrustMapper TrustReducer PageRank HadoopCounter
 classDir = classes
 sourceDir = src
 HADOOP_PREFIX=/opt/

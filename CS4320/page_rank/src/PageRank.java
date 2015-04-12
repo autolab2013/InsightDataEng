@@ -12,6 +12,8 @@ import org.apache.hadoop.util.*;
 
 public class PageRank {
 
+	public static final long precision = 1000000;
+
 	public static void main(String[] args) throws IOException {
 		int numRepititions = 5;
 		long leftover = 0;
@@ -37,10 +39,20 @@ public class PageRank {
 				System.err.println("ERROR IN JOB: " + e);
 				return;
 			}
-			if(i%2 == 0) {
+
+			//get Hadoop Counters
+			Counters counters = job.getCounters();
+			Counter size_cnt = counters.findCounter(HadoopCounter.SIZE);
+			size = size_cnt.getValue();
+			Counter leftover_cnt = counters.findCounter(HadoopCounter.LEFTOVER);
+			System.out.println("Page Rank leftover value: "+ leftover_cnt.getValue());
+
+			if(i%2 == 0) {//Trust Job done
 				// Set up leftover and size
-			} else {
+				leftover = leftover_cnt.getValue();
+			} else {//Leftover Job done
 				// Set up leftover and size
+				leftover_cnt.setValue(0);//clear leftover
 			}
 		}
 	}

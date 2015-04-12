@@ -14,11 +14,19 @@ public class TrustMapper extends Mapper<IntWritable, Node, IntWritable, NodeOrDo
         //Implement
         System.out.println("Trust mapper get node id: " + value.nodeid+", page rank is "+ value.getPageRank());
         double rank = value.getPageRank();
-        double loss = value.getPageRank()/value.outgoingSize();
         int[] outlink = value.outgoing;
+
         for(int i=0;i<outlink.length;i++){
+            double loss = rank/value.outgoingSize();
             IntWritable nid = new IntWritable(outlink[i]);
             context.write(nid, new NodeOrDouble(loss));
+            value.setPageRank(value.getPageRank() - loss);
+        }
+        if(value.outgoing.length == 0) {//dangling node
+            long long_rank = (long)(value.getPageRank() * PageRank.precision);
+            context.getCounter(HadoopCounter.LEFTOVER).increment(long_rank);
+            System.out.println("dangling node: "+ context.getCounter(HadoopCounter.LEFTOVER).getValue());
+            value.setPageRank(0);
         }
         context.write(new IntWritable(value.nodeid), new NodeOrDouble(value));
     }

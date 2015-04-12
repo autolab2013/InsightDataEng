@@ -13,14 +13,16 @@ public class TrustReducer extends Reducer<IntWritable, NodeOrDouble, IntWritable
         //Implement
         Node n = null;
         double rank = 0;
-        for(NodeOrDouble val : values){
-            if(val.isNode())
+        for(NodeOrDouble val : values) {
+            if (val.isNode())
                 n = val.getNode();
             else
                 rank += val.getDouble();
         }
-        n.setPageRank(rank);
-        context.write(new IntWritable(n.nodeid), n);
+        n.setPageRank(rank + n.getPageRank());
+        context.write(new IntWritable(n.nodeid), n);//emit pair
+
+        context.getCounter(HadoopCounter.SIZE).increment(1);//get graph size
         System.out.println("Trust reducer get node id: " + n.nodeid+", page rank is "+ n.getPageRank());
     }
 }
